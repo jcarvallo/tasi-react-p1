@@ -1,25 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Router } from "@reach/router";
+import { Layout, Header, Footer } from "./components/index";
+import { StateProvider, initialState, reducer } from "./context/index";
+import {
+  Inicio,
+  Operaciones,
+  OperacionCancelada,
+  Exito,
+  Saldo,
+  Extraccion,
+  Deposito,
+  OtroMonto,
+} from "./containers/index";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <StateProvider initialState={initialState} reducer={reducer}>
+        <Layout>
+          <Header />
+          <Router>
+            <Inicio path="/" />
+            <Operaciones path="/operaciones" />
+            <OperacionCancelada path="/cancelacion" />
+            <Exito path="/exito/:tipo" />
+            <Saldo path="/saldo" />
+            <Extraccion path="/extraccion" />
+            <Deposito path="/deposito" />
+            <OtroMonto path="/otro-monto" />
+          </Router>
+          <Footer />
+        </Layout>
+      </StateProvider>
+    </>
   );
 }
 
