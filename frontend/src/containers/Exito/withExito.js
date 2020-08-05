@@ -1,46 +1,51 @@
-import React, { useEffect } from "react";
-import { navigate } from "@reach/router";
+import React, { useEffect, useState } from "react";
 import { useStateValue } from "../../context/index";
 import UserService from "../../services/user.service";
+import {backHome} from '../../utils'
 
 const servicesUser = new UserService();
 
 const withExito = (Component) => (props) => {
-
-  let { tipo } = props;
+  let { type } = props;
   const [ctx, dispatch] = useStateValue();
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
-    dispatch({
-      type: "changeHeader",
-      title: "",
-      hidden: false,
-      view: "exito",
-    });
-    dispatch({ type: "changeFooter", hidden: true });
+    if (Object.values(ctx.user).length > 0) {
+      dispatch({
+        type: "changeHeader",
+        title: "",
+        hidden: false,
+        view: "exito",
+      });
+      dispatch({ type: "changeFooter", hidden: true });
 
-    let updateUser = async () => {
-      try {
-        let data = ctx.user ? ctx.user : {};
-        let update = await servicesUser.updateUser(data);
-        console.log(update);
-        // let update= await servicesUser.updateUser(ctx.user);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+      let updateUser = async () => {
+        let { _id, saldo } = ctx.user;
+        try {
+          let transaccion = await servicesUser.transaccion(_id, type, saldo);
+          if (transaccion) {
+            setMessage(transaccion.data.message);
+          } else {
+            throw new Error("Error en la operacion");
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
 
-    updateUser();
+      updateUser();
 
-    // const timer = setTimeout(() => navigate("/"), 10000);
-    // return () => clearTimeout(timer);
-    console.log(localStorage.getItem("users"));
-  }, [dispatch, ctx.user]);
+      const timer = setTimeout(() => backHome(dispatch), 10000);
+
+      return () => clearTimeout(timer);
+    } else {
+      backHome(dispatch)
+    }
+  }, [dispatch, ctx.user, type]);
 
   const actions = {
-    tipo: tipo === "deposito" ? "depósito" : "extracción",
-    monto: tipo === "deposito" ? ctx.montoDeposito : ctx.montoExtraccion,
-    cuenta: ctx.user.cuenta,
+    message,
   };
 
   return <Component {...actions} />;

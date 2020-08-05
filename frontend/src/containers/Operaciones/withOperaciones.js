@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import { navigate } from "@reach/router";
 import { useStateValue } from "../../context/index";
+import { backHome } from "../../utils";
 const withOperaciones = (Component) => (props) => {
   const [ctx, dispatch] = useStateValue();
   useEffect(() => {
+    if (Object.values(ctx.user).length > 0) {
       dispatch({
         type: "changeHeader",
         title: "",
@@ -12,14 +14,14 @@ const withOperaciones = (Component) => (props) => {
       });
       dispatch({
         type: "changeFooter",
-        hidden: false, 
-        continueButton: false ,
+        hidden: false,
+        continueButton: false,
       });
-
-  }, [dispatch]);
+    } else backHome(dispatch);
+  }, [dispatch, ctx.user]);
 
   const actions = {
-    user: Object.values(ctx.user).length > 0 ? ctx.user : {},
+    user:ctx.user,
     handleGoTo: (path) => navigate(`/${path}`),
   };
   return <Component {...actions} />;

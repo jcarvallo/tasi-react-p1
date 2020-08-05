@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { navigate } from "@reach/router";
-import { validateMaxLength, validateForm } from "../../utils/validate";
+import { validateMaxLength, validateForm } from "../../utils";
 import UserService from "../../services/user.service";
 import { useStateValue } from "../../context/index";
 
@@ -20,20 +20,11 @@ const withInicio = (Component) => (props) => {
   // const timer = ()=> setTimeout(() => {
   //   setstate(initialState);
   // }, 10000);
-  console.log(ctx);
-
   useEffect(() => {
     let getUsers = async () => {
       try {
-        let users = await service.getUsers();
-         if (localStorage.getItem("users")) {
-          localStorage.setItem("users", JSON.stringify(users));
-         }
-        setUsers(JSON.parse(localStorage.getItem('users')));
-        // if (users.length > 0) {
-        // } else {
-        //   throw "Error services";
-        // }
+        let users = await service.getUsers();         
+        setUsers(users.data);
       } catch (error) {
         console.log(error);
       }
@@ -43,6 +34,7 @@ const withInicio = (Component) => (props) => {
 
   const actions = {
     state,
+    ctx,
     handleInput: (inputValue) => {
       if (state.inputName) {
         let newValue = validateMaxLength(

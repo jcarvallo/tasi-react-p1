@@ -2,13 +2,17 @@ import { Request, Response } from "express";
 import { OperationService } from "../services/index";
 
 class OperationController {
-  async deposito(req: Request, res: Response): Promise<Response> {
-    let result = await OperationService.deposito(req.params.id, req.body);
-    return res.json(result);
-  }
-  async extraccion(req: Request, res: Response): Promise<Response> {
-    let result = await OperationService.extraccion(req.params.id, req.body);
-    return res.json(result);
+  async transaction(
+    req: Request,
+    res: Response
+  ): Promise<Response | undefined> {
+    let { id, type } = req.params;
+    let result = await OperationService.transaction(id, type, req.body);
+    if (result) {
+      return res.json(result);
+    } else {
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
   }
 }
 

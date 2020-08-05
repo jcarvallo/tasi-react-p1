@@ -7,11 +7,8 @@ class OperationRouter {
   }
   routers = (): void => {
     this.router
-      .route("/operations/deposito/:id")
-      .put(OperationController.deposito);
-    this.router
-      .route("/operations/extraccion/:id")
-      .put(OperationController.extraccion);
+      .route("/operations/:type/:id")
+      .put(OperationController.transaction);
   };
 }
 export default new OperationRouter().router;

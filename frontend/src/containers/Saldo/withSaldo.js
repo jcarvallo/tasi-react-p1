@@ -1,21 +1,26 @@
 import React, { useEffect } from "react";
 import { navigate } from "@reach/router";
 import { useStateValue } from "../../context/index";
+import { backHome } from "../../utils";
 
 const withSaldo = (Component) => (props) => {
   const [ctx, dispatch] = useStateValue();
- 
+
   useEffect(() => {
-    dispatch({ type: "changeHeader", title: "", hidden: true, view: "saldo" });
-    const timer = setTimeout(() => {
-      dispatch({ type: "initialState" });
-      navigate("/");
-    }, 15000);
-    return () => clearTimeout(timer);
-  }, [dispatch]);
+    if (Object.values(ctx.user).length > 0) {
+      dispatch({
+        type: "changeHeader",
+        title: "",
+        hidden: true,
+        view: "saldo",
+      });
+      const timer = setTimeout(() => backHome(dispatch), 15000);
+      return () => clearTimeout(timer);
+    } else backHome(dispatch);
+  }, [dispatch, ctx.user]);
 
   const actions = {
-    user: Object.values(ctx.user).length > 0 ? ctx.user : {},
+    user: ctx.user,
     confirmacion: (action) => {
       switch (action) {
         case 1:

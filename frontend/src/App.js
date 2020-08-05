@@ -23,7 +23,7 @@ function App() {
             <Inicio path="/" />
             <Operaciones path="/operaciones" />
             <OperacionCancelada path="/cancelacion" />
-            <Exito path="/exito/:tipo" />
+            <Exito path="/exito/:type" />
             <Saldo path="/saldo" />
             <Extraccion path="/extraccion" />
             <Deposito path="/deposito" />

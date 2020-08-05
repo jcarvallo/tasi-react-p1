@@ -1,28 +1,26 @@
 import React, { useEffect } from "react";
-import { navigate } from "@reach/router";
 import { useStateValue } from "../../context/index";
+import { backHome } from "../../utils";
 
 const withOperacionCancelada = (Component) => (props) => {
-   const [ctx, dispatch] = useStateValue();
-   console.log(ctx);
+  const [ctx, dispatch] = useStateValue();
   useEffect(() => {
-    dispatch({
-      type: "changeHeader",
-      title: "",
-      hidden: true,
-      view: "cancelacion",
-    });
-    dispatch({
-      type: "changeFooter",
-      hidden: true, 
-      continueButton: false,
-    });
-    const timer = setTimeout(() => {
-      dispatch({ type: "initialState" });
-      navigate("/");
-    }, 5000);
-    return () => clearTimeout(timer);
-  }, [dispatch]);
+    if (Object.values(ctx.user).length > 0) {
+      dispatch({
+        type: "changeHeader",
+        title: "",
+        hidden: true,
+        view: "cancelacion",
+      });
+      dispatch({
+        type: "changeFooter",
+        hidden: true,
+        continueButton: false,
+      });
+      const timer = setTimeout(() => backHome(dispatch), 5000);
+      return () => clearTimeout(timer);
+    } else backHome(dispatch);
+  }, [dispatch, ctx.user]);
 
   return <Component />;
 };

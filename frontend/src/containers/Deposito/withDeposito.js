@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useStateValue } from "../../context/index";
-import { validateMaxLength } from "../../utils/validate";
+import { validateMaxLength, backHome } from "../../utils";
 import { navigate } from "@reach/router";
 
 const withDeposito = (Component) => (props) => {
@@ -17,18 +17,20 @@ const withDeposito = (Component) => (props) => {
   const [ctx, dispatch] = useStateValue();
 
   useEffect(() => {
-    dispatch({
-      type: "changeHeader",
-      title: "Depósito",
-      hidden: false,
-      view: "deposito",
-    });
-    dispatch({
-      type: "changeFooter",
-      hidden: false,
-      continueButton: false,
-    });
-  }, [dispatch]);
+    if (Object.values(ctx.user).length > 0) {
+      dispatch({
+        type: "changeHeader",
+        title: "Depósito",
+        hidden: false,
+        view: "deposito",
+      });
+      dispatch({
+        type: "changeFooter",
+        hidden: false,
+        continueButton: false,
+      });
+    } else backHome(dispatch);
+  }, [dispatch, ctx.user]);
 
   const totalDeposito = (totalPesos) => {
     let total = 0;
@@ -111,13 +113,14 @@ const withDeposito = (Component) => (props) => {
     },
     handleContinue: () => {
       let value = ctx.user.saldo.value + state.monto.total;
-      let formateado= value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+      let formateado = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      const saldo = { value, formateado };
       dispatch({
         type: "setDeposito",
-        saldo: { value, formateado },
+        saldo,
         monto: state.monto.formateado,
       });
-      navigate('/exito/deposito')
+      navigate("/exito/deposito");
     },
   };
   return <Component {...actions} />;

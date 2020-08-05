@@ -1,20 +1,15 @@
-import users from "../data/user.json";
+import axios from "axios";
 
 export default class UserService {
+  api = process.env.REACT_APP_API_USERS;
   async getUsers() {
-    return await users;
+    return await axios.get(`${this.api}users`);
   }
-  async updateUser(data) {
-    let localUser = JSON.parse(localStorage.getItem("users"));
-    let update = [];
-    for (let user of localUser) {
-      if (user.dni === data.dni) {
-        update.push(data);
-      } else {
-        update.push(user);
-      }
-    }
-    localStorage.setItem('users',JSON.stringify(update))
-    return await true
+  async transaccion(id, type, data) {
+    return await axios({
+      method: "PUT",
+      url: `${this.api}operations/${type}/${id}`,
+      data,
+    });
   }
 }
