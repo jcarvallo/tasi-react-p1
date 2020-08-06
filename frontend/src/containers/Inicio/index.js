@@ -5,7 +5,7 @@ import { Row, Col, Form, FormGroup, Input } from "reactstrap";
 
 const Inicio = ({...res}) => {
     return (
-      <Row style={{marginTop:'50px'}}>
+      <Row style={{ marginTop: "50px" }}>
         <Col xs="6">
           <h4>Ingrese DNI y Clave</h4>
           <Form style={{ paddingTop: "11%" }}>
@@ -34,7 +34,7 @@ const Inicio = ({...res}) => {
           </Form>
         </Col>
         <Col xs="6">
-          <NumericKeyboard {...res} />
+          <NumericKeyboard {...res.actionsKeyboard} />
         </Col>
       </Row>
     );

@@ -11,8 +11,8 @@ import {
 } from "reactstrap";
 
 const Deposito = ({ ...res }) => {
-  const { state, handleFocus } = res;
-  const { cien, docientos, quinientos, mil } = state;
+  const { handleFocus } = res;
+  const { cien, docientos, quinientos, mil, monto } = res.state;
   return (
     <div>
       <Row style={{ marginTop: "50px" }}>
@@ -71,8 +71,8 @@ const Deposito = ({ ...res }) => {
         </Col>
         <Col xs="6" className="totalDeposito">
           <label>MONTO A DEPOSITAR</label>
-          <h4>{`$${state.monto.formateado}`}</h4>
-          <NumericKeyboard {...res} />
+          <h4>{`$${monto.formateado}`}</h4>
+          <NumericKeyboard {...res.actionsKeyboard} />
         </Col>
       </Row>
       <style jsx="true">

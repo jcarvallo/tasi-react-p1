@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useStateValue } from "../../context/index";
-import { validateMaxLength } from "../../utils/validate";
+import { validateMaxLength, formateado as format } from "../../utils";
+import { navigate } from "@reach/router";
 
 const withOtroMonto = (Component) => (props) => {
   const initialState = {
@@ -9,8 +10,8 @@ const withOtroMonto = (Component) => (props) => {
     montoFormateado: "",
   };
   const [state, setState] = useState(initialState);
+  const [modal, setModal] = useState(false);
   const [ctx, dispatch] = useStateValue();
-  console.log(ctx);
 
   useEffect(() => {
     dispatch({
@@ -28,31 +29,44 @@ const withOtroMonto = (Component) => (props) => {
 
   const actions = {
     state,
-    handleInput: (inputValue) => {
-      let newValue = validateMaxLength(5, inputValue, state.monto);
-
-      setState((pre) => ({
-        ...pre,
-        monto: newValue,
-        montoFormateado: newValue.replace(/\B(?=(\d{3})+(?!\d))/g, "."),
-        disabled: newValue.length >= 3 ? false : true,
-      }));
-    },
-    handleDelete: () => {
-  
+    actionsModal: { modal, setModal },
+    actionsKeyboard: {
+      disabled: state.disabled,
+      handleInput: (inputValue) => {
+        let newValue = validateMaxLength(5, inputValue, state.monto);
+        setState({
+          ...state,
+          monto: newValue,
+          montoFormateado: format(newValue),
+          disabled: newValue.length >= 3 ? false : true,
+        });
+      },
+      handleDelete: () => {
         let value = state.monto;
         let newValue = value.substring(value.length - 1, 0);
-    
-        setState((pre) => ({
-          ...pre,
+
+        setState({
+          ...state,
           monto: newValue,
-          montoFormateado: newValue.replace(/\B(?=(\d{3})+(?!\d))/g, "."),
+          montoFormateado: format(newValue),
           disabled: newValue.length >= 3 ? false : true,
-        }));
-    
-    },
-    handleContinue: () => {
-      console.log(state);
+        });
+      },
+      handleContinue: () => {
+        let { monto, montoFormateado } = state;
+        let { value } = ctx.user.saldo;
+        if (value > monto) {
+          value = value - monto;
+          let formateado = format(value);
+          let saldo = { value, formateado };
+          dispatch({
+            type: "setOperation",
+            saldo,
+            monto: montoFormateado,
+          });
+          navigate("/exito/extraccion");
+        } else setModal(!modal);
+      },
     },
   };
 

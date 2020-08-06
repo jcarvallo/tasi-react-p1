@@ -42,7 +42,7 @@ const withNumericKeyboard = (Component) => (props) => {
                   size="lg"
                   block
                   className="mt-4 mb-4"
-                  disabled={props.state.disabled}
+                  disabled={props.disabled}
                   onClick={() => props.handleContinue()}
                 >
                   Continuar

@@ -35,48 +35,51 @@ const withInicio = (Component) => (props) => {
   const actions = {
     state,
     ctx,
-    handleInput: (inputValue) => {
-      if (state.inputName) {
-        let newValue = validateMaxLength(
-          state[state.inputName.toLowerCase()][1].maxLength,
-          inputValue,
-          state[state.inputName.toLowerCase()][0]
+    actionsKeyboard: {
+      disabled: state.disabled,
+      handleInput: (inputValue) => {
+        if (state.inputName) {
+          let newValue = validateMaxLength(
+            state[state.inputName.toLowerCase()][1].maxLength,
+            inputValue,
+            state[state.inputName.toLowerCase()][0]
+          );
+  
+          let value = state[state.inputName.toLowerCase()];
+          value[0] = newValue;
+          setstate({
+            ...state,
+            [state.inputName.toLowerCase()]: value,
+            disabled: validateForm({ ...state }),
+          });
+        }
+      },
+      handleDelete: () => {
+        if (state.inputName) {
+          let value = state[state.inputName.toLowerCase()];
+          let newValue = value[0].substring(value[0].length - 1, 0);
+          value[0] = newValue;
+          setstate({
+            ...state,
+            [state.inputName.toLowerCase()]: value,
+            disabled: validateForm({ ...state }),
+          });
+        }
+      },
+      handleContinue: () => {
+        let dataUser = users.find(
+          (user) => user.dni === state.dni[0] && user.clave === state.clave[0]
         );
-
-        let value = state[state.inputName.toLowerCase()];
-        value[0] = newValue;
-        setstate({
-          ...state,
-          [state.inputName.toLowerCase()]: value,
-          disabled: validateForm({ ...state }),
-        });
-      }
+        if (dataUser) {
+          dispatch({ type: "setUser", user: dataUser });
+          navigate("/operaciones");
+        } else {
+          alert("Datos Incorretos");
+        }
+      },
     },
     handleFocus: ({ target }) => {
       setstate({ ...state, inputName: target.name });
-    },
-    handleDelete: () => {
-      if (state.inputName) {
-        let value = state[state.inputName.toLowerCase()];
-        let newValue = value[0].substring(value[0].length - 1, 0);
-        value[0] = newValue;
-        setstate({
-          ...state,
-          [state.inputName.toLowerCase()]: value,
-          disabled: validateForm({ ...state }),
-        });
-      }
-    },
-    handleContinue: () => {
-      let dataUser = users.find(
-        (user) => user.dni === state.dni[0] && user.clave === state.clave[0]
-      );
-      if (dataUser) {
-        dispatch({ type: "setUser", user: dataUser });
-        navigate("/operaciones");
-      } else {
-        alert("Datos Incorretos");
-      }
     },
   };
   return <Component {...actions} />;

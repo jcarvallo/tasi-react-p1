@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useStateValue } from "../../context/index";
-import { validateMaxLength, backHome } from "../../utils";
+import { validateMaxLength, backHome, formateado as format } from "../../utils";
 import { navigate } from "@reach/router";
 
 const withDeposito = (Component) => (props) => {
@@ -60,7 +60,7 @@ const withDeposito = (Component) => (props) => {
 
     return {
       total,
-      formateado: total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."),
+      formateado: format(total),
     };
   };
 
@@ -69,58 +69,61 @@ const withDeposito = (Component) => (props) => {
     handleFocus: ({ target }) => {
       setState({ ...state, inputName: target.name });
     },
-    handleInput: (inputValue) => {
-      if (state.inputName) {
-        let cantidad = validateMaxLength(
-          2,
-          inputValue,
-          state[state.inputName].cantidad
-        );
-
-        let nexTotalPesos = parseInt(cantidad) * state[state.inputName].pesos;
-
-        setState({
-          ...state,
-          [state.inputName]: {
-            ...state[state.inputName],
-            cantidad: cantidad,
-            total: nexTotalPesos,
-          },
-          monto: totalDeposito(nexTotalPesos),
-          disabled: totalDeposito(nexTotalPesos).total > 0 ? false : true,
+    actionsKeyboard:{
+      disabled:state.disabled,
+      handleInput: (inputValue) => {
+        if (state.inputName) {
+          let cantidad = validateMaxLength(
+            2,
+            inputValue,
+            state[state.inputName].cantidad
+          );
+  
+          let nexTotalPesos = parseInt(cantidad) * state[state.inputName].pesos;
+  
+          setState({
+            ...state,
+            [state.inputName]: {
+              ...state[state.inputName],
+              cantidad: cantidad,
+              total: nexTotalPesos,
+            },
+            monto: totalDeposito(nexTotalPesos),
+            disabled: totalDeposito(nexTotalPesos).total > 0 ? false : true,
+          });
+        }
+      },
+      handleDelete: () => {
+        if (state.inputName) {
+          let cantidad = state[state.inputName].cantidad;
+          let newCantidad = cantidad.substring(cantidad.length - 1, 0);
+          let newTotalPesos =
+            parseInt(newCantidad ? newCantidad : 0) *
+            state[state.inputName].pesos;
+  
+          setState({
+            ...state,
+            [state.inputName]: {
+              ...state[state.inputName],
+              cantidad: newCantidad,
+              total: newTotalPesos,
+            },
+            monto: totalDeposito(newTotalPesos),
+            disabled: totalDeposito(newTotalPesos).total > 0 ? false : true,
+          });
+        }
+      },
+      handleContinue: () => {
+        let value = ctx.user.saldo.value + state.monto.total;
+        let formateado = format(value);
+        const saldo = { value, formateado };
+        dispatch({
+          type: "setOperation",
+          saldo,
+          monto: state.monto.formateado,
         });
-      }
-    },
-    handleDelete: () => {
-      if (state.inputName) {
-        let cantidad = state[state.inputName].cantidad;
-        let newCantidad = cantidad.substring(cantidad.length - 1, 0);
-        let newTotalPesos =
-          parseInt(newCantidad ? newCantidad : 0) *
-          state[state.inputName].pesos;
-
-        setState({
-          ...state,
-          [state.inputName]: {
-            ...state[state.inputName],
-            cantidad: newCantidad,
-            total: newTotalPesos,
-          },
-          monto: totalDeposito(newTotalPesos),
-          disabled: totalDeposito(newTotalPesos).total > 0 ? false : true,
-        });
-      }
-    },
-    handleContinue: () => {
-      let value = ctx.user.saldo.value + state.monto.total;
-      let formateado = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-      const saldo = { value, formateado };
-      dispatch({
-        type: "setDeposito",
-        saldo,
-        monto: state.monto.formateado,
-      });
-      navigate("/exito/deposito");
+        navigate("/exito/deposito");
+      },
     },
   };
   return <Component {...actions} />;

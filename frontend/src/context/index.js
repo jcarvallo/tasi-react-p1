@@ -18,8 +18,7 @@ export const initialState = {
     handleContinue: () => {},
     disabledContinue: true,
   },
-  montoDeposito: 0,
-  montoExtraccion: 0,
+  montoOperation: "0",
 };
 
 export const reducer = (state, action) => {
@@ -39,7 +38,7 @@ export const reducer = (state, action) => {
           hidden: action.hidden,
           continueButton: action.continueButton
             ? action.continueButton
-            : state.footer.continueButton,
+            : false,
           handleContinue: action.handleContinue
             ? action.handleContinue
             : state.footer.handleContinue,
@@ -57,18 +56,12 @@ export const reducer = (state, action) => {
         ...state,
         user: action.user,
       };
-    case "setDeposito":
+    case "setOperation":
       return {
         ...state,
         user: { ...state.user, saldo: action.saldo },
-        montoDeposito: action.monto,
+        montoOperation: action.monto,
       };
-    case "setExtraccion":
-      return {
-        ...state,
-        montoExtraccion: action.monto,
-      };
-
     default:
       return state;
   }

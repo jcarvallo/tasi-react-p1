@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useStateValue } from "../../context/index";
 import UserService from "../../services/user.service";
-import {backHome} from '../../utils'
+import { backHome } from "../../utils";
 
 const servicesUser = new UserService();
 
@@ -20,10 +20,11 @@ const withExito = (Component) => (props) => {
       });
       dispatch({ type: "changeFooter", hidden: true });
 
-      let updateUser = async () => {
+      let operation = async () => {
         let { _id, saldo } = ctx.user;
+        let data = { saldo, monto: ctx.montoOperation };
         try {
-          let transaccion = await servicesUser.transaccion(_id, type, saldo);
+          let transaccion = await servicesUser.transaccion(_id, type, data);
           if (transaccion) {
             setMessage(transaccion.data.message);
           } else {
@@ -34,15 +35,15 @@ const withExito = (Component) => (props) => {
         }
       };
 
-      updateUser();
+      operation();
 
-      const timer = setTimeout(() => backHome(dispatch), 10000);
+      const timer = setTimeout(() => backHome(dispatch), 7000);
 
       return () => clearTimeout(timer);
     } else {
-      backHome(dispatch)
+      backHome(dispatch);
     }
-  }, [dispatch, ctx.user, type]);
+  }, [dispatch, ctx.user, ctx.montoOperation, type]);
 
   const actions = {
     message,

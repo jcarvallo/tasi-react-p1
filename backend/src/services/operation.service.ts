@@ -1,14 +1,19 @@
-import User, { ISaldo } from "../models/User";
+import User from "../models/User";
+
+interface IData {
+  saldo: any;
+  monto: string;
+}
 
 class OperationService {
-  async transaction(id: string, type: string, saldo: ISaldo) {
+  async transaction(id: string, type: string, data: IData) {
     try {
       let query = await User.findOne({ _id: id });
       if (query) {
-        await query?.updateOne({ saldo: saldo });
+        await query?.updateOne({ saldo: data.saldo });
         let operation = await User.findById(id);
         return {
-          message: `Su ${type} de monto $${operation?.saldo?.formateado}<br/> 
+          message: `Su ${type} de monto $${data.monto}<br/> 
                     en la cuenta ${operation?.cuenta}<br/> 
                     fue realizado con éxito.`,
         };

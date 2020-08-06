@@ -1,5 +1,6 @@
 import React from "react";
 import withExtracion from "./withExtracion";
+import { AlertModal } from "../../components";
 import {
   Row,
   Col,
@@ -12,6 +13,7 @@ import {
 } from "reactstrap";
 
 const Extraccion = ({ ...res }) => {
+ 
   return (
     <div className="content">
       <Form>
@@ -96,6 +98,7 @@ const Extraccion = ({ ...res }) => {
           </Col>
         </Row>
       </Form>
+      <AlertModal {...res.actionsModal} />
       <style jsx="true">
         {`
           .content {
