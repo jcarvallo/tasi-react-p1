@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { navigate } from "@reach/router";
 import { validateMaxLength, validateForm } from "../../utils";
 import UserService from "../../services/user.service";
-import { useStateValue } from "../../context/index";
+import { useStateValue } from "../../context";
 
 const service = new UserService();
 
@@ -17,13 +17,10 @@ const withInicio = (Component) => (props) => {
   const [users, setUsers] = useState([]);
   const [ctx, dispatch] = useStateValue();
 
-  // const timer = ()=> setTimeout(() => {
-  //   setstate(initialState);
-  // }, 10000);
   useEffect(() => {
     let getUsers = async () => {
       try {
-        let users = await service.getUsers();         
+        let users = await service.getUsers();
         setUsers(users.data);
       } catch (error) {
         console.log(error);
@@ -31,6 +28,11 @@ const withInicio = (Component) => (props) => {
     };
     getUsers();
   }, [setstate]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setstate(initialState), 7000);
+    return () => clearTimeout(timer);
+  }, [setstate, state, initialState]);
 
   const actions = {
     state,
@@ -44,7 +46,6 @@ const withInicio = (Component) => (props) => {
             inputValue,
             state[state.inputName.toLowerCase()][0]
           );
-  
           let value = state[state.inputName.toLowerCase()];
           value[0] = newValue;
           setstate({

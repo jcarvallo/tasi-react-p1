@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useStateValue } from "../../context/index";
-import { validateMaxLength, formateado as format } from "../../utils";
+import { validateMaxLength, formateado as format, backHome } from "../../utils";
 import { navigate } from "@reach/router";
 
 const withOtroMonto = (Component) => (props) => {
@@ -26,6 +26,14 @@ const withOtroMonto = (Component) => (props) => {
       continueButton: false,
     });
   }, [dispatch]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setState(initialState);
+      setModal(false);
+      backHome(dispatch);
+    }, 15000);
+    return () => clearTimeout(timer);
+  }, [dispatch, state, modal, initialState]);
 
   const actions = {
     state,

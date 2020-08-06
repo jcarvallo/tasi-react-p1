@@ -14,6 +14,11 @@ const withSaldo = (Component) => (props) => {
         hidden: true,
         view: "saldo",
       });
+       dispatch({
+         type: "changeFooter",
+         hidden: true,
+         continueButton: false,
+       });
       const timer = setTimeout(() => backHome(dispatch), 15000);
       return () => clearTimeout(timer);
     } else backHome(dispatch);

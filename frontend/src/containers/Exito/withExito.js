@@ -38,11 +38,9 @@ const withExito = (Component) => (props) => {
       operation();
 
       const timer = setTimeout(() => backHome(dispatch), 7000);
-
       return () => clearTimeout(timer);
-    } else {
-      backHome(dispatch);
-    }
+    } else backHome(dispatch);
+    
   }, [dispatch, ctx.user, ctx.montoOperation, type]);
 
   const actions = {

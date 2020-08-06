@@ -32,9 +32,13 @@ const withDeposito = (Component) => (props) => {
     } else backHome(dispatch);
   }, [dispatch, ctx.user]);
 
+  useEffect(() => {
+    const timer = setTimeout(() => backHome(dispatch), 10000);
+    return () => clearTimeout(timer);
+  }, [dispatch, state]);
+
   const totalDeposito = (totalPesos) => {
     let total = 0;
-
     for (let [key, value] of Object.entries(state)) {
       if (key !== state.inputName) {
         switch (key) {
@@ -69,8 +73,8 @@ const withDeposito = (Component) => (props) => {
     handleFocus: ({ target }) => {
       setState({ ...state, inputName: target.name });
     },
-    actionsKeyboard:{
-      disabled:state.disabled,
+    actionsKeyboard: {
+      disabled: state.disabled,
       handleInput: (inputValue) => {
         if (state.inputName) {
           let cantidad = validateMaxLength(
@@ -78,9 +82,9 @@ const withDeposito = (Component) => (props) => {
             inputValue,
             state[state.inputName].cantidad
           );
-  
+
           let nexTotalPesos = parseInt(cantidad) * state[state.inputName].pesos;
-  
+
           setState({
             ...state,
             [state.inputName]: {
@@ -100,7 +104,7 @@ const withDeposito = (Component) => (props) => {
           let newTotalPesos =
             parseInt(newCantidad ? newCantidad : 0) *
             state[state.inputName].pesos;
-  
+
           setState({
             ...state,
             [state.inputName]: {

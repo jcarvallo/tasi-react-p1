@@ -13,7 +13,7 @@ const Saldo = ({ ...res }) => {
       <Row>
         <Col sm="12" md={{ size: 6, offset: 3 }}>
           <Button
-            style={{ marginRight: "86px", width: "10%" }}
+            style={{ marginRight: "86px", width: "12%" }}
             onClick={() => res.confirmacion(1)}
           >
             SI

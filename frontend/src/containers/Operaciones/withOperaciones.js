@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { navigate } from "@reach/router";
-import { useStateValue } from "../../context/index";
+import { useStateValue } from "../../context";
 import { backHome } from "../../utils";
 const withOperaciones = (Component) => (props) => {
   const [ctx, dispatch] = useStateValue();
@@ -17,6 +17,8 @@ const withOperaciones = (Component) => (props) => {
         hidden: false,
         continueButton: false,
       });
+      const timer = setTimeout(() => backHome(dispatch), 15000);
+      return () => clearTimeout(timer);
     } else backHome(dispatch);
   }, [dispatch, ctx.user]);
 
