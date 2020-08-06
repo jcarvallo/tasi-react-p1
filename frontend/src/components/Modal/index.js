@@ -35,7 +35,7 @@ const AlertModal = ({ ...res }) => {
           </Button>
         </ModalFooter>
       </Modal>
-      <style>
+      <style jsx="true">
         {`
             .btn-footer-modal {
                 background-color: #f60;
