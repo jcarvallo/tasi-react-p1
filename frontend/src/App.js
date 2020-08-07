@@ -1,7 +1,7 @@
 import React from "react";
 import { Router } from "@reach/router";
-import { Layout, Header, Footer } from "./components/index";
-import { StateProvider, initialState, reducer } from "./context/index";
+import { Layout, Header, Footer } from "./components";
+import { StateProvider, initialState, reducer } from "./context";
 import {
   Inicio,
   Operaciones,
@@ -11,7 +11,8 @@ import {
   Extraccion,
   Deposito,
   OtroMonto,
-} from "./containers/index";
+  Error
+} from "./containers";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Extraccion path="/extraccion" />
             <Deposito path="/deposito" />
             <OtroMonto path="/otro-monto" />
+            <Error path="/error" />
           </Router>
           <Footer />
         </Layout>

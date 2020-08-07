@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useStateValue } from "../../context/index";
+import { useStateValue } from "../../context";
 import { navigate } from "@reach/router";
 import { formateado as format, backHome } from "../../utils";
 

@@ -1,6 +1,6 @@
 import React from "react";
 import withDeposito from "./withDeposito";
-import { NumericKeyboard } from "../../components/index";
+import { NumericKeyboard } from "../../components";
 import {
   Row,
   Col,

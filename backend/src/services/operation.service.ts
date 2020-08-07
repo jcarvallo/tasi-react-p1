@@ -17,11 +17,10 @@ class OperationService {
                     en la cuenta ${operation?.cuenta}<br/> 
                     fue realizado con éxito.`,
         };
-      } else {
-        throw query;
-      }
+      } else throw query;
+      
     } catch (e) {
-      return e;
+      return e===null || e && null;
     }
   }
 }

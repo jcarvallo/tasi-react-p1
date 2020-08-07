@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useStateValue } from "../../context/index";
-import UserService from "../../services/user.service";
-import { backHome } from "../../utils";
+import { useStateValue } from "../../context";
+import { OperationService } from "../../services";
+import { backHome, handleError } from "../../utils";
 
-const servicesUser = new UserService();
+const services = new OperationService();
 
 const withExito = (Component) => (props) => {
   let { type } = props;
@@ -19,28 +19,20 @@ const withExito = (Component) => (props) => {
         view: "exito",
       });
       dispatch({ type: "changeFooter", hidden: true });
-
       let operation = async () => {
-        let { _id, saldo } = ctx.user;
-        let data = { saldo, monto: ctx.montoOperation };
         try {
-          let transaccion = await servicesUser.transaccion(_id, type, data);
-          if (transaccion) {
-            setMessage(transaccion.data.message);
-          } else {
-            throw new Error("Error en la operacion");
-          }
-        } catch (error) {
-          console.log(error);
+          let { _id, saldo } = ctx.user;
+          let data = { saldo, monto: ctx.montoOperation };
+          let transaccion = await services.transaccion(_id, type, data);
+          setMessage(transaccion.data.message);
+        } catch (e) {
+          handleError(e);
         }
       };
-
       operation();
-
       const timer = setTimeout(() => backHome(dispatch), 7000);
       return () => clearTimeout(timer);
     } else backHome(dispatch);
-    
   }, [dispatch, ctx.user, ctx.montoOperation, type]);
 
   const actions = {

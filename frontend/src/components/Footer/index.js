@@ -7,7 +7,7 @@ const Footer = ({ ...res }) =>
     <div className="footer py-3">
       <Row>
         <Col>
-          <Button className="btn-footer" onClick={() => res.handleCancel()}>
+          <Button className="btn-footer" onClick={res.handleCancel}>
             Cancelar
           </Button>
         </Col>
@@ -15,7 +15,7 @@ const Footer = ({ ...res }) =>
           {res.ctx.footer.continueButton && (
             <Button
               className="btn-footer"
-              onClick={() => res.handleContinue()}
+              onClick={res.handleContinue}
               disabled={res.ctx.footer.disabledContinue}
             >
               Continuar

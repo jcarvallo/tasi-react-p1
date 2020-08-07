@@ -1,8 +1,7 @@
 import React from "react";
 import withOtroMonto from "./withOtroMonto";
-import { NumericKeyboard } from "../../components/index";
+import { NumericKeyboard, AlertModal } from "../../components";
 import { Row, Col } from "reactstrap";
-import { AlertModal } from "../../components";
 
 const OtroMonto = ({ ...res }) => {
   const { montoFormateado } = res.state;

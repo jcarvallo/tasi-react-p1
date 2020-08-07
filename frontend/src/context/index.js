@@ -8,10 +8,12 @@ export const StateProvider = ({ reducer, initialState, children }) => (
   </StateContext.Provider>
 );
 export const initialState = {
-  titleHeader: "Cajero Automático TASI",
-  view: "inicio",
-  hidden: false,
   user: {},
+  header: {
+    title: "Cajero Automático TASI",
+    hidden: false,
+    view: "inicio",
+  },
   footer: {
     hidden: true,
     continueButton: false,
@@ -26,9 +28,12 @@ export const reducer = (state, action) => {
     case "changeHeader":
       return {
         ...state,
-        titleHeader: action.title,
-        hidden: action.hidden,
-        view: "saldo",
+        header: {
+          ...state.header,
+          hidden: action.hidden,
+          title: action.title ? action.title : "",
+          view: action.view ? action.view : "",
+        },
       };
     case "changeFooter":
       return {
@@ -36,9 +41,7 @@ export const reducer = (state, action) => {
         footer: {
           ...state.footer,
           hidden: action.hidden,
-          continueButton: action.continueButton
-            ? action.continueButton
-            : false,
+          continueButton: action.continueButton ? action.continueButton : false,
           handleContinue: action.handleContinue
             ? action.handleContinue
             : state.footer.handleContinue,

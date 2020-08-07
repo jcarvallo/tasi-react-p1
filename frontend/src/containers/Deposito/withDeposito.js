@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useStateValue } from "../../context/index";
+import { useStateValue } from "../../context";
 import { validateMaxLength, backHome, formateado as format } from "../../utils";
 import { navigate } from "@reach/router";
 

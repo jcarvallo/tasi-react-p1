@@ -2,10 +2,10 @@ import React from "react";
 import withHeader from "./withHeader";
 
 const Header = ({ ...res }) => {
-  let { titleHeader, view, hidden } = res.ctx;
+  let { title, view, hidden } = res.ctx.header;
   return (
     <div className="header">
-      {!hidden && <h3>{titleHeader}</h3>}
+      {!hidden && <h3>{title}</h3>}
       <style jsx="true">
         {`
           .header {

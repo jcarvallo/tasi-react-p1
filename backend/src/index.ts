@@ -2,7 +2,11 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import path from "path";
-import { userRoutes, operationRoutes } from "./routes/index";
+import {
+  userRoutes,
+  operationRoutes,
+  authenticationRouter,
+} from "./routes/index";
 import { startConnection } from "./database";
 
 class Server {
@@ -25,6 +29,7 @@ class Server {
   private router(): void {
     this.app.use("/api", userRoutes);
     this.app.use("/api", operationRoutes);
+    this.app.use("/api", authenticationRouter);
   }
   async start() {
     startConnection();

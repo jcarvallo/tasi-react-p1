@@ -1,5 +1,5 @@
 import React from "react";
-import { useStateValue } from "../../context/index";
+import { useStateValue } from "../../context";
 import { navigate } from "@reach/router";
 
 const withFooter = (Component) => (props) => {

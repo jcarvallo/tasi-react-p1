@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { navigate } from "@reach/router";
-import { validateMaxLength, validateForm } from "../../utils";
-import UserService from "../../services/user.service";
+import { validateMaxLength, validateForm, handleError } from "../../utils";
+import { AuthenticationService } from "../../services";
 import { useStateValue } from "../../context";
 
-const service = new UserService();
+const service = new AuthenticationService();
 
 const withInicio = (Component) => (props) => {
   let initialState = {
@@ -14,23 +14,10 @@ const withInicio = (Component) => (props) => {
     disabled: true,
   };
   const [state, setstate] = useState(initialState);
-  const [users, setUsers] = useState([]);
   const [ctx, dispatch] = useStateValue();
 
   useEffect(() => {
-    let getUsers = async () => {
-      try {
-        let users = await service.getUsers();
-        setUsers(users.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getUsers();
-  }, [setstate]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setstate(initialState), 7000);
+    const timer = setTimeout(() => setstate(initialState), 10000);
     return () => clearTimeout(timer);
   }, [setstate, state, initialState]);
 
@@ -67,15 +54,14 @@ const withInicio = (Component) => (props) => {
           });
         }
       },
-      handleContinue: () => {
-        let dataUser = users.find(
-          (user) => user.dni === state.dni[0] && user.clave === state.clave[0]
-        );
-        if (dataUser) {
-          dispatch({ type: "setUser", user: dataUser });
+      handleContinue: async () => {
+        try {
+          let data = { clave: state.clave[0], dni: state.dni[0] };
+          let dataUser = await service.authentication(data);
+          dispatch({ type: "setUser", user: dataUser.data.user });
           navigate("/operaciones");
-        } else {
-          alert("Datos Incorretos");
+        } catch (e) {
+          handleError(e)
         }
       },
     },

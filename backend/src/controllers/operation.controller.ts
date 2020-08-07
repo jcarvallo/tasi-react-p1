@@ -11,7 +11,7 @@ class OperationController {
     if (result) {
       return res.json(result);
     } else {
-      return res.status(500).json({ error: "Internal Server Error" });
+      return res.status(500).json({ error: "Error al realizar la operación" });
     }
   }
 }
