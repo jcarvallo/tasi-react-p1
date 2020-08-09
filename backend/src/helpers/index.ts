@@ -1,0 +1,1 @@
+export { creteToken } from "./createToken";

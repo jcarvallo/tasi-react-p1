@@ -12,18 +12,13 @@ const withExito = (Component) => (props) => {
 
   useEffect(() => {
     if (Object.values(ctx.user).length > 0) {
-      dispatch({
-        type: "changeHeader",
-        title: "",
-        hidden: false,
-        view: "exito",
-      });
-      dispatch({ type: "changeFooter", hidden: true });
+     dispatch({ type: "changeHeader", hidden: true });
+     dispatch({ type: "changeFooter", hidden: true });
       let operation = async () => {
         try {
-          let { _id, saldo } = ctx.user;
+          let { saldo } = ctx.user;
           let data = { saldo, monto: ctx.montoOperation };
-          let transaccion = await services.transaccion(_id, type, data);
+          let transaccion = await services.transaccion(type, data);
           setMessage(transaccion.data.message);
         } catch (e) {
           handleError(e);

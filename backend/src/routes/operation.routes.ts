@@ -1,4 +1,5 @@
 import { Router } from "express";
+import passport from "passport";
 import { OperationController } from "../controllers/index";
 class OperationRouter {
   router: Router = Router();
@@ -7,8 +8,11 @@ class OperationRouter {
   }
   routers = (): void => {
     this.router
-      .route("/operations/:type/:id")
-      .put(OperationController.transaction);
+      .route("/operations/:type")
+      .put(
+        passport.authenticate("jwt", { session: false }),
+        OperationController.transaction
+      );
   };
 }
 export default new OperationRouter().router;

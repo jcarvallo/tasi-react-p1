@@ -56,12 +56,12 @@ const withInicio = (Component) => (props) => {
       },
       handleContinue: async () => {
         try {
-          let data = { clave: state.clave[0], dni: state.dni[0] };
-          let dataUser = await service.authentication(data);
-          dispatch({ type: "setUser", user: dataUser.data.user });
+          let auth = { password: state.clave[0], username: state.dni[0] };
+          let { data } = await service.authentication(auth);
+          dispatch({ type: "setUser", user: data.user });
           navigate("/operaciones");
         } catch (e) {
-          handleError(e)
+          handleError(e);
         }
       },
     },

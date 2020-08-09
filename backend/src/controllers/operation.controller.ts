@@ -1,18 +1,20 @@
 import { Request, Response } from "express";
-import { OperationService } from "../services/index";
+import { OperationService } from "../services";
 
 class OperationController {
-  async transaction(
-    req: Request,
-    res: Response
-  ): Promise<Response | undefined> {
-    let { id, type } = req.params;
-    let result = await OperationService.transaction(id, type, req.body);
-    if (result) {
-      return res.json(result);
-    } else {
-      return res.status(500).json({ error: "Error al realizar la operación" });
+  async transaction(req: Request,res: Response): Promise<Response | undefined> {
+    try {
+      let { user, body }: any = req;
+      let { type } = req.params;
+      if (Object.values(user).length > 0) {
+        let result = await OperationService.transaction(user.id, type, body);
+        if (result) return res.json(result);
+        else throw null;
+      } else throw null;
+    } catch (e) {
+      return res.status(400).json({ error: "Error al realizar la operación" });
     }
+    
   }
 }
 

@@ -1,12 +1,8 @@
-import axios from "axios";
+import { httpClient } from "../utils";
 
 export default class OperationService {
-  api = process.env.REACT_APP_API_USERS;
-  async transaccion(id, type, data) {
-    return await axios({
-      method: "PUT",
-      url: `${this.api}operations/${type}/${id}`,
-      data,
-    });
+  async transaccion(type, data) {
+    let request = { data, url: `operations/${type}` };
+    return await httpClient.put(request);
   }
 }

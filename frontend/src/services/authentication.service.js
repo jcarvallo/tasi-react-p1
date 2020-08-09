@@ -1,14 +1,9 @@
-import axios from "axios";
+import { httpClient } from "../utils";
 
-class AuthenticationService {
-  api = process.env.REACT_APP_API_USERS;
-  async authentication(data) {
-    return await axios({
-      method: "POST",
-      url: `${this.api}authentication`,
-      data,
-    });
+export default class AuthenticationService {
+  async authentication(auth) {
+    let request = { auth, url: "authentication" };
+    return await httpClient.post(request);
   }
 }
 
-export default AuthenticationService;
