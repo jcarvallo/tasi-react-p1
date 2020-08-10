@@ -1,23 +1,27 @@
-import config from "./httpConfig";
+import { config, method } from "./httpConfig";
 
 const httpClient = {
   get: async (request) => {
     let { url, params } = request;
-    return await config.get(`${url}`, { params: params ? params : {} });
+    return await config({
+      method: method.get,
+      url,
+      params: params ? params : {},
+    });
   },
   post: async (request) => {
     let { url, data, auth } = request;
-    let method = "POST";
     return (await auth)
-      ? config({ method, url, data: {}, auth })
-      : config({ method, url, data });
+      ? config({ method: method.post, url, data: {}, auth })
+      : config({ method: method.post, url, data });
   },
   put: async (request) => {
     let { url, data } = request;
-    return await config({ method: "PUT", url, data });
+    return await config({ method: method.put, url, data });
   },
   delete: async (request) => {
-    return await config.delete(`${request.url}`);
+    let { url } = request;
+    return await config({ method: method.delete, url });
   },
 };
 

@@ -6,6 +6,13 @@ const getToken = () => localStorage.getItem("token");
 
 const config = axios.create({ baseURL: process.env.REACT_APP_API_USERS });
 
+const method = {
+  get: "GET",
+  post: "POST",
+  put: "PUT",
+  delete: "DELETE",
+};
+
 config.interceptors.request.use(
   (req) => {
     if (req.url !== "authentication") {
@@ -25,4 +32,4 @@ config.interceptors.response.use(
   (error) => Promise.reject(error)
 );
 
-export default config;
+export { config, method };

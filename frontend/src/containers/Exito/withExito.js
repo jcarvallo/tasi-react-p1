@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useStateValue } from "../../context";
-import { OperationService } from "../../services";
+import { operationService } from "../../services";
 import { backHome, handleError } from "../../utils";
-
-const services = new OperationService();
 
 const withExito = (Component) => (props) => {
   let { type } = props;
@@ -18,7 +16,7 @@ const withExito = (Component) => (props) => {
         try {
           let { saldo } = ctx.user;
           let data = { saldo, monto: ctx.montoOperation };
-          let transaccion = await services.transaccion(type, data);
+          let transaccion = await operationService.transaccion(type, data);
           setMessage(transaccion.data.message);
         } catch (e) {
           handleError(e);

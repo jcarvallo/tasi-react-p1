@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { navigate } from "@reach/router";
 import { validateMaxLength, validateForm, handleError } from "../../utils";
-import { AuthenticationService } from "../../services";
+import { authenticationService } from "../../services";
 import { useStateValue } from "../../context";
-
-const service = new AuthenticationService();
 
 const withInicio = (Component) => (props) => {
   let initialState = {
@@ -57,7 +55,7 @@ const withInicio = (Component) => (props) => {
       handleContinue: async () => {
         try {
           let auth = { password: state.clave[0], username: state.dni[0] };
-          let { data } = await service.authentication(auth);
+          let { data } = await authenticationService.authentication(auth);
           dispatch({ type: "setUser", user: data.user });
           navigate("/operaciones");
         } catch (e) {
